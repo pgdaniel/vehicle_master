@@ -1,14 +1,9 @@
 <tr>
-  <td><%= link_to vehicle.id, vehicle %></td>
   <td><%= vehicle.year %></td>
   <td><%= vehicle.manufacturer.name %></td>
   <td><%= link_to vehicle.name, vehicle %></td>
-  <td class="hide-mobile"><%= vehicle.base %></td>
-  <td class="hide-tablet"><%= vehicle.displacement_liters %></td>
   <td class="hide-mobile"><%= vehicle.cylinders %></td>
+  <td class="hide-tablet"><%= vehicle.displacement_liters %></td>
   <td class="hide-tablet"><%= vehicle.transmission %></td>
   <td class="hide-tablet"><%= vehicle.klass %></td>
-  <td class="hide-mobile"><%= vehicle.turbo_charger ? 'Yes' : 'No' %></td>
-  <td class="hide-mobile"><%= vehicle.super_charger ? 'Yes' : 'No' %></td>
-  <td class="hide-mobile"><%= vehicle.guzzler ? 'Yes' : 'No' %></td>
 </tr>
