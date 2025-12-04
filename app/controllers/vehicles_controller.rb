@@ -1,5 +1,9 @@
 class VehiclesController < ApplicationController
- def index
-  render json: Vehicle.all, except: [:created_at, :updated_at]
- end
+  include Filterable
+
+  def index
+    vehicles = Vehicle.includes(:manufacturer)
+    vehicles = apply_filters(vehicles, Vehicle)
+    @pagy, @vehicles = pagy(vehicles, limit: 25)
+  end
 end

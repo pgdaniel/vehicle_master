@@ -8,3 +8,56 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Responsive table styles */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* On mobile screens, hide less critical columns */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hide-tablet {
+    display: none;
+  }
+}
+
+/* Pagination styles */
+nav.pagy.nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+nav.pagy.nav a,
+nav.pagy.nav .current,
+nav.pagy.nav .gap {
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  border: 1px solid var(--pico-muted-border-color);
+  background-color: var(--pico-card-background-color);
+}
+
+nav.pagy.nav a:hover {
+  background-color: var(--pico-secondary-background);
+}
+
+nav.pagy.nav .current {
+  background-color: var(--pico-primary-background);
+  color: var(--pico-primary-inverse);
+  font-weight: bold;
+  border-color: var(--pico-primary-background);
+}
+
+nav.pagy.nav .gap {
+  border: none;
+  background: transparent;
+}
