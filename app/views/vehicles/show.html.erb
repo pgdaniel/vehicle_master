@@ -1,0 +1,110 @@
+<%= link_to "← Back to Vehicles", vehicles_path, role: "button", class: "secondary outline" %>
+
+<article>
+  <header>
+    <h1><%= @vehicle.year %> <%= @vehicle.manufacturer.name %> <%= @vehicle.name %></h1>
+    <p><small>Vehicle ID: <%= @vehicle.id %></small></p>
+  </header>
+
+  <div class="grid">
+    <!-- Main Details Card -->
+    <section>
+      <hgroup>
+        <h2>Vehicle Details</h2>
+      </hgroup>
+      <div class="grid">
+        <div>
+          <small>Manufacturer</small>
+          <p><strong><%= @vehicle.manufacturer.name %></strong></p>
+        </div>
+
+        <div>
+          <small>Model Name</small>
+          <p><strong><%= @vehicle.name %></strong></p>
+        </div>
+
+        <div>
+          <small>Year</small>
+          <p><strong><%= @vehicle.year %></strong></p>
+        </div>
+
+        <div>
+          <small>Base Model</small>
+          <p><strong><%= @vehicle.base || 'N/A' %></strong></p>
+        </div>
+
+        <div>
+          <small>Class</small>
+          <p><strong><%= @vehicle.klass %></strong></p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="grid">
+    <!-- Engine Specifications Card -->
+    <section>
+      <hgroup>
+        <h2>Engine Specifications</h2>
+      </hgroup>
+      <div class="grid">
+        <div>
+          <small>Displacement</small>
+          <p><strong><%= @vehicle.displacement_liters %> L</strong></p>
+        </div>
+
+        <div>
+          <small>Cylinders</small>
+          <p><strong><%= @vehicle.cylinders %></strong></p>
+        </div>
+
+        <div>
+          <small>Transmission</small>
+          <p><strong><%= @vehicle.transmission %></strong></p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="grid">
+    <!-- Features Card -->
+    <section>
+      <hgroup>
+        <h2>Features</h2>
+      </hgroup>
+      <ul>
+        <li>
+          <% if @vehicle.turbo_charger %>
+            <mark>✓ Turbocharger</mark>
+          <% else %>
+            ○ No Turbocharger
+          <% end %>
+        </li>
+
+        <li>
+          <% if @vehicle.super_charger %>
+            <mark>✓ Supercharger</mark>
+          <% else %>
+            ○ No Supercharger
+          <% end %>
+        </li>
+
+        <li>
+          <% if @vehicle.guzzler %>
+            <del>⚠ Gas Guzzler</del>
+          <% else %>
+            <ins>✓ Standard Efficiency</ins>
+          <% end %>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <footer>
+    <small>
+      <strong>Created:</strong> <%= @vehicle.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+      &nbsp;|&nbsp;
+      <strong>Last Updated:</strong> <%= @vehicle.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+    </small>
+  </footer>
+</article>

@@ -1,20 +1,54 @@
-<h1>Vehicles</h1>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+  <h1 style="margin: 0;">Vehicles</h1>
+  <button type="button" id="toggle-search" style="padding: 0.5rem 1rem;">
+    <span id="search-toggle-text">Show Filters</span>
+  </button>
+</div>
 
-<%= form_with url: vehicles_path, method: :get, data: { turbo_frame: "_top" } do |f| %>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-    <%= f.text_field :name, placeholder: "Name", value: params[:name] %>
-    <%= f.text_field :manufacturer_name, placeholder: "Manufacturer", value: params[:manufacturer_name] %>
-    <%= f.number_field :year, placeholder: "Year", value: params[:year] %>
-    <%= f.number_field :cylinders, placeholder: "Cylinders", value: params[:cylinders] %>
-    <%= f.select :guzzler, [["All", ""], ["Guzzler", "true"], ["Not Guzzler", "false"]], { selected: params[:guzzler] }, { placeholder: "Guzzler" } %>
-    <%= f.select :turbo_charger, [["All", ""], ["Turbo", "true"], ["No Turbo", "false"]], { selected: params[:turbo_charger] }, { placeholder: "Turbo" } %>
-    <%= f.select :super_charger, [["All", ""], ["Supercharger", "true"], ["No Supercharger", "false"]], { selected: params[:super_charger] }, { placeholder: "Supercharger" } %>
-  </div>
-  <div style="display: flex; gap: 1rem;">
-    <%= f.submit "Search" %>
-    <%= link_to "Clear", vehicles_path, role: "button", class: "secondary" %>
-  </div>
-<% end %>
+<div id="search-form" style="display: none; margin-bottom: 2rem;">
+  <%= form_with url: vehicles_path, method: :get, data: { turbo_frame: "_top" } do |f| %>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+      <%= f.text_field :name, placeholder: "Name", value: params[:name] %>
+      <%= f.text_field :manufacturer_name, placeholder: "Manufacturer", value: params[:manufacturer_name] %>
+      <%= f.number_field :year, placeholder: "Year", value: params[:year] %>
+      <%= f.number_field :cylinders, placeholder: "Cylinders", value: params[:cylinders] %>
+      <%= f.select :guzzler, [["All", ""], ["Guzzler", "true"], ["Not Guzzler", "false"]], { selected: params[:guzzler] }, { placeholder: "Guzzler" } %>
+      <%= f.select :turbo_charger, [["All", ""], ["Turbo", "true"], ["No Turbo", "false"]], { selected: params[:turbo_charger] }, { placeholder: "Turbo" } %>
+      <%= f.select :super_charger, [["All", ""], ["Supercharger", "true"], ["No Supercharger", "false"]], { selected: params[:super_charger] }, { placeholder: "Supercharger" } %>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+      <%= f.submit "Search" %>
+      <%= link_to "Clear", vehicles_path, role: "button", class: "secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('toggle-search');
+    const searchForm = document.getElementById('search-form');
+    const toggleText = document.getElementById('search-toggle-text');
+
+    // Check if there are any active filters
+    const hasFilters = <%= params.slice(:name, :manufacturer_name, :year, :cylinders, :guzzler, :turbo_charger, :super_charger).values.any?(&:present?).to_json %>;
+
+    // Show filters by default if any are active
+    if (hasFilters) {
+      searchForm.style.display = 'block';
+      toggleText.textContent = 'Hide Filters';
+    }
+
+    toggleBtn.addEventListener('click', function() {
+      if (searchForm.style.display === 'none') {
+        searchForm.style.display = 'block';
+        toggleText.textContent = 'Hide Filters';
+      } else {
+        searchForm.style.display = 'none';
+        toggleText.textContent = 'Show Filters';
+      }
+    });
+  });
+</script>
 
 <div class="table-responsive">
   <table>

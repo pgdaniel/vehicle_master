@@ -6,6 +6,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :manufacturers, only: [:index, :show]
       resources :vehicles, only: [:index, :show]
+
+      namespace :toon do
+        resources :manufacturers, only: [:index, :show]
+        resources :vehicles, only: [:index, :show]
+      end
     end
   end
 

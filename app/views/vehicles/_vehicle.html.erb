@@ -2,7 +2,7 @@
   <td><%= link_to vehicle.id, vehicle %></td>
   <td><%= vehicle.year %></td>
   <td><%= vehicle.manufacturer.name %></td>
-  <td><%= vehicle.name %></td>
+  <td><%= link_to vehicle.name, vehicle %></td>
   <td class="hide-mobile"><%= vehicle.base %></td>
   <td class="hide-tablet"><%= vehicle.displacement_liters %></td>
   <td class="hide-mobile"><%= vehicle.cylinders %></td>
