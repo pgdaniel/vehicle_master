@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  year: 1
+  displacement_liters: 1.5
+  transmission: MyString
+  cylinders: 1
+  klass: MyString
+  manufacturer: one
+  name: MyString
+
+two:
+  year: 1
+  displacement_liters: 1.5
+  transmission: MyString
+  cylinders: 1
+  klass: MyString
+  manufacturer: two
+  name: MyString
