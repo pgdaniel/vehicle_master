@@ -5,9 +5,9 @@ require "csv"
 CSV.foreach("vehicles.csv", headers: true) do |row|
   manufacturer = Manufacturer.find_or_create_by!(name: row["make"])
 
-    # if row["model"] == "Mustang Dark Horse"
-    #   binding.pry
-    # end
+  # if row["model"] == "Mustang Dark Horse"
+  #   binding.pry
+  # end
 
   manufacturer.vehicles.find_or_create_by!(
     name: row["model"],

@@ -100,6 +100,44 @@
     </section>
   </div>
 
+  <div class="grid">
+    <!-- Images Section -->
+    <section>
+      <hgroup>
+        <h2>Images</h2>
+        <p>Upload photos of this vehicle</p>
+      </hgroup>
+
+      <% if @vehicle.images.attached? %>
+        <div class="grid">
+          <% @vehicle.images.each do |image| %>
+            <figure>
+              <%= image_tag image.variant(resize_to_limit: [400, 300]), alt: "#{@vehicle.name} image" %>
+              <figcaption>
+                <%= button_to "Delete", delete_image_vehicle_path(@vehicle, image_id: image.id), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this image?" }, class: "secondary outline" %>
+              </figcaption>
+            </figure>
+          <% end %>
+        </div>
+      <% else %>
+        <p><em>No images uploaded yet.</em></p>
+      <% end %>
+
+      <!-- Image Management Actions -->
+      <div class="grid">
+        <details>
+          <summary role="button" class="secondary">Upload Images</summary>
+          <%= form_with url: attach_images_vehicle_path(@vehicle), method: :post, multipart: true do |f| %>
+            <%= f.file_field :images, multiple: true, accept: "image/*", required: true %>
+            <%= f.submit "Upload", style: "margin-top: 1rem;" %>
+          <% end %>
+        </details>
+
+        <%= link_to "Search & Download Images", search_images_vehicle_path(@vehicle), role: "button", class: "outline" %>
+      </div>
+    </section>
+  </div>
+
   <footer>
     <small>
       <strong>Created:</strong> <%= @vehicle.created_at.strftime("%B %d, %Y at %I:%M %p") %>

@@ -9,9 +9,9 @@ module Api
           manufacturers = Manufacturer.all
           keys = %w[id name]
 
-          toon_data = format_toon_array(manufacturers, keys, 'manufacturers')
+          toon_data = format_toon_array(manufacturers, keys, "manufacturers")
 
-          render plain: toon_data, content_type: 'text/toon'
+          render plain: toon_data, content_type: "text/toon"
         end
 
         def show
@@ -20,9 +20,9 @@ module Api
 
           toon_data = format_toon_object(manufacturer, keys)
 
-          render plain: toon_data, content_type: 'text/toon'
+          render plain: toon_data, content_type: "text/toon"
         rescue ActiveRecord::RecordNotFound
-          render plain: "error: Manufacturer not found", status: :not_found, content_type: 'text/toon'
+          render plain: "error: Manufacturer not found", status: :not_found, content_type: "text/toon"
         end
       end
     end

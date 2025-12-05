@@ -1,15 +1,22 @@
 Rails.application.routes.draw do
-  resources :vehicles
+  resources :vehicles do
+    member do
+      post :attach_images
+      get :search_images
+      post :attach_selected_images
+      delete "images/:image_id", to: "vehicles#delete_image", as: :delete_image
+    end
+  end
   resources :manufacturers
 
   namespace :api do
     namespace :v1 do
-      resources :manufacturers, only: [:index, :show]
-      resources :vehicles, only: [:index, :show]
+      resources :manufacturers, only: [ :index, :show ]
+      resources :vehicles, only: [ :index, :show ]
 
       namespace :toon do
-        resources :manufacturers, only: [:index, :show]
-        resources :vehicles, only: [:index, :show]
+        resources :manufacturers, only: [ :index, :show ]
+        resources :vehicles, only: [ :index, :show ]
       end
     end
   end

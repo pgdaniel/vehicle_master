@@ -1,4 +1,4 @@
-require 'ostruct'
+require "ostruct"
 
 module Api
   module V1
@@ -12,37 +12,61 @@ module Api
           # Pagination parameters with defaults
           page = (params[:page] || 1).to_i
           per_page = (params[:per_page] || 100).to_i
-          per_page = [[per_page, 1].max, 1000].min # Clamp between 1 and 1000
+          per_page = [ [ per_page, 1 ].max, 1000 ].min # Clamp between 1 and 1000
 
           # Count query - separate from data query to avoid relation pollution
           count_query = Vehicle.joins(:manufacturer)
           count_query = apply_filters(count_query, Vehicle)
-          total_count = count_query.distinct.count('vehicles.id')
+          total_count = count_query.distinct.count("vehicles.id")
 
           # Data query - build fresh to avoid any mutation issues
-          data_query = Vehicle.joins(:manufacturer)
+          data_query = Vehicle.joins(:manufacturer).includes(images_attachments: :blob)
           data_query = apply_filters(data_query, Vehicle)
           data_query = data_query
-            .select('vehicles.*', 'manufacturers.name as manufacturer_name')
+            .select("vehicles.*", "manufacturers.name as manufacturer_name")
             .offset((page - 1) * per_page)
             .limit(per_page)
 
-          keys = %w[id year displacement_liters transmission cylinders klass manufacturer_id name guzzler base turbo_charger super_charger manufacturer_name]
+          # Convert to array with image URLs
+          vehicles_with_images = data_query.map do |vehicle|
+            image_urls = vehicle.images.map { |image| Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true) }.join("|")
+
+            OpenStruct.new(
+              id: vehicle.id,
+              year: vehicle.year,
+              displacement_liters: vehicle.displacement_liters,
+              transmission: vehicle.transmission,
+              cylinders: vehicle.cylinders,
+              klass: vehicle.klass,
+              manufacturer_id: vehicle.manufacturer_id,
+              name: vehicle.name,
+              guzzler: vehicle.guzzler,
+              base: vehicle.base,
+              turbo_charger: vehicle.turbo_charger,
+              super_charger: vehicle.super_charger,
+              manufacturer_name: vehicle.manufacturer_name,
+              image_urls: image_urls
+            )
+          end
+
+          keys = %w[id year displacement_liters transmission cylinders klass manufacturer_id name guzzler base turbo_charger super_charger manufacturer_name image_urls]
 
           toon_data = format_toon_array(
-            data_query,
+            vehicles_with_images,
             keys,
-            'vehicles',
+            "vehicles",
             pagination: { page: page, per_page: per_page, total_count: total_count }
           )
 
-          render plain: toon_data, content_type: 'text/toon'
+          render plain: toon_data, content_type: "text/toon"
         end
 
         def show
-          vehicle = Vehicle.includes(:manufacturer).find(params[:id])
+          vehicle = Vehicle.includes(:manufacturer, images_attachments: :blob).find(params[:id])
 
-          keys = %w[id year displacement_liters transmission cylinders klass manufacturer_id name guzzler base turbo_charger super_charger manufacturer_name]
+          image_urls = vehicle.images.map { |image| Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true) }.join("|")
+
+          keys = %w[id year displacement_liters transmission cylinders klass manufacturer_id name guzzler base turbo_charger super_charger manufacturer_name image_urls]
 
           vehicle_data = OpenStruct.new(
             id: vehicle.id,
@@ -57,14 +81,15 @@ module Api
             base: vehicle.base,
             turbo_charger: vehicle.turbo_charger,
             super_charger: vehicle.super_charger,
-            manufacturer_name: vehicle.manufacturer.name
+            manufacturer_name: vehicle.manufacturer.name,
+            image_urls: image_urls
           )
 
           toon_data = format_toon_object(vehicle_data, keys)
 
-          render plain: toon_data, content_type: 'text/toon'
+          render plain: toon_data, content_type: "text/toon"
         rescue ActiveRecord::RecordNotFound
-          render plain: "error: Vehicle not found", status: :not_found, content_type: 'text/toon'
+          render plain: "error: Vehicle not found", status: :not_found, content_type: "text/toon"
         end
       end
     end

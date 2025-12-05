@@ -5,7 +5,7 @@ module ToonFormatter
 
   def format_toon_array(records, keys, array_name = nil, pagination: {})
     # Determine array name
-    name = array_name || (records.respond_to?(:model_name) ? records.model_name.plural : 'items')
+    name = array_name || (records.respond_to?(:model_name) ? records.model_name.plural : "items")
 
     # Use pagination total_count if available, otherwise count the records
     count = pagination[:total_count] || (records.is_a?(Array) ? records.count : records.count)
@@ -45,7 +45,7 @@ module ToonFormatter
     case value
     when String
       # Escape commas and newlines in strings
-      value.include?(',') || value.include?("\n") ? "\"#{value.gsub('"', '\"')}\"" : value
+      value.include?(",") || value.include?("\n") ? "\"#{value.gsub('"', '\"')}\"" : value
     when TrueClass, FalseClass
       value.to_s
     when NilClass
