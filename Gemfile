@@ -66,6 +66,6 @@ gem "csv", "~> 3.3", require: false
 
 gem "pry-rails", "~> 0.3.11"
 
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 43.2"
 
 gem "httparty", "~> 0.22"
