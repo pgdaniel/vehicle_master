@@ -1,10 +1,57 @@
-<p style="color: green"><%= notice %></p>
+<%= link_to "← Back to Manufacturers", manufacturers_path, role: "button", class: "secondary outline" %>
 
-<%= render @manufacturer %>
+<article>
+  <header>
+    <h1><%= @manufacturer.name %></h1>
+    <p><small>Manufacturer ID: <%= @manufacturer.id %></small></p>
+  </header>
 
-<div>
-  <%= link_to "Edit this manufacturer", edit_manufacturer_path(@manufacturer) %> |
-  <%= link_to "Back to manufacturers", manufacturers_path %>
+  <div class="grid">
+    <section>
+      <hgroup>
+        <h2>Vehicles</h2>
+        <p><%= @pagy.count %> total vehicles</p>
+      </hgroup>
 
-  <%= button_to "Destroy this manufacturer", @manufacturer, method: :delete %>
-</div>
+      <%= link_to "View All Vehicles", manufacturer_vehicles_path(@manufacturer), role: "button", class: "outline" %>
+
+      <% if @vehicles.any? %>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Name</th>
+                <th class="hide-mobile">Cylinders</th>
+                <th class="hide-tablet">Displacement (L)</th>
+                <th class="hide-tablet">Transmission</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @vehicles.each do |vehicle| %>
+                <tr>
+                  <td><%= vehicle.year %></td>
+                  <td><%= link_to vehicle.name, manufacturer_vehicle_path(@manufacturer, vehicle) %></td>
+                  <td class="hide-mobile"><%= vehicle.cylinders %></td>
+                  <td class="hide-tablet"><%= vehicle.displacement_liters %></td>
+                  <td class="hide-tablet"><%= vehicle.transmission %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <%== pagy_nav(@pagy) %>
+      <% else %>
+        <p><em>No vehicles found for this manufacturer.</em></p>
+      <% end %>
+    </section>
+  </div>
+
+  <footer style="margin-top: 2rem;">
+    <div style="display: flex; gap: 1rem;">
+      <%= link_to "Edit Manufacturer", edit_manufacturer_path(@manufacturer), role: "button" %>
+      <%= button_to "Delete Manufacturer", @manufacturer, method: :delete, role: "button", class: "secondary", data: { turbo_confirm: "Are you sure you want to delete this manufacturer?" } %>
+    </div>
+  </footer>
+</article>

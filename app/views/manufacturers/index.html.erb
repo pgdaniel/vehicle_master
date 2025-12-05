@@ -1,16 +1,35 @@
-<p style="color: green"><%= notice %></p>
-
-<% content_for :title, "Manufacturers" %>
-
 <h1>Manufacturers</h1>
 
-<div id="manufacturers">
-  <% @manufacturers.each do |manufacturer| %>
-    <%= render manufacturer %>
-    <p>
-      <%= link_to "Show this manufacturer", manufacturer %>
-    </p>
-  <% end %>
+<div class="table-responsive">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Vehicle Count</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background-color: var(--background-color);">
+        <td><strong>All Manufacturers</strong></td>
+        <td><%= Vehicle.count %> vehicles</td>
+        <td style="text-align: right;">
+          <%= link_to "View All Vehicles", all_vehicles_path, role: "button", class: "outline" %>
+        </td>
+      </tr>
+      <% @manufacturers.each do |manufacturer| %>
+        <tr>
+          <td><%= link_to manufacturer.name, manufacturer %></td>
+          <td><%= manufacturer.vehicles.count %> vehicles</td>
+          <td style="text-align: right;">
+            <%= link_to "View Vehicles", manufacturer_vehicles_path(manufacturer), role: "button", class: "outline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
 
-<%= link_to "New manufacturer", new_manufacturer_path %>
+<div style="margin-top: 2rem;">
+  <%= link_to "New Manufacturer", new_manufacturer_path, role: "button" %>
+</div>

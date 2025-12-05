@@ -1,7 +1,7 @@
 <tr>
   <td><%= vehicle.year %></td>
   <td><%= vehicle.manufacturer.name %></td>
-  <td><%= link_to vehicle.name, vehicle %></td>
+  <td><%= link_to vehicle.name, manufacturer_vehicle_path(vehicle.manufacturer, vehicle) %></td>
   <td class="hide-mobile"><%= vehicle.cylinders %></td>
   <td class="hide-tablet"><%= vehicle.displacement_liters %></td>
   <td class="hide-tablet"><%= vehicle.transmission %></td>

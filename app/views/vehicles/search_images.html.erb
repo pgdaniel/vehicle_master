@@ -1,4 +1,4 @@
-<%= link_to "← Back to Vehicle", @vehicle, role: "button", class: "secondary outline" %>
+<%= link_to "← Back to Vehicle", manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), role: "button", class: "secondary outline" %>
 
 <article>
   <header>
@@ -6,7 +6,7 @@
     <p>Select images to download and attach to this vehicle</p>
   </header>
 
-  <%= form_with url: attach_selected_images_vehicle_path(@vehicle), method: :post do |f| %>
+  <%= form_with url: attach_selected_images_manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), method: :post do |f| %>
     <% if @image_results.any? %>
       <div class="grid">
         <% @image_results.each_with_index do |image_url, index| %>
@@ -21,11 +21,11 @@
 
       <div style="margin-top: 2rem;">
         <%= f.submit "Download & Attach Selected Images" %>
-        <%= link_to "Cancel", @vehicle, role: "button", class: "secondary" %>
+        <%= link_to "Cancel", manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), role: "button", class: "secondary" %>
       </div>
     <% else %>
       <p><em>No images found. Try searching manually or uploading your own images.</em></p>
-      <%= link_to "Back to Vehicle", @vehicle, role: "button" %>
+      <%= link_to "Back to Vehicle", manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), role: "button" %>
     <% end %>
   <% end %>
 </article>

@@ -1,4 +1,5 @@
 class ManufacturersController < ApplicationController
+  include Pagy::Backend
   before_action :set_manufacturer, only: %i[ show edit update destroy ]
 
   # GET /manufacturers or /manufacturers.json
@@ -8,6 +9,7 @@ class ManufacturersController < ApplicationController
 
   # GET /manufacturers/1 or /manufacturers/1.json
   def show
+    @pagy, @vehicles = pagy(@manufacturer.vehicles.includes(:manufacturer), limit: 25)
   end
 
   # GET /manufacturers/new

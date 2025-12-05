@@ -1,8 +1,17 @@
 class VehiclesController < ApplicationController
   include Filterable
 
-  def index
+  def all
+    @all_vehicles = true
     vehicles = Vehicle.includes(:manufacturer)
+    vehicles = apply_filters(vehicles, Vehicle)
+    @pagy, @vehicles = pagy(vehicles, limit: 50)
+    render :all
+  end
+
+  def index
+    @manufacturer = Manufacturer.find(params[:manufacturer_id])
+    vehicles = @manufacturer.vehicles.includes(:manufacturer)
     vehicles = apply_filters(vehicles, Vehicle)
     @pagy, @vehicles = pagy(vehicles, limit: 50)
   end
@@ -18,9 +27,9 @@ class VehiclesController < ApplicationController
       params[:images].each do |image|
         @vehicle.images.attach(image)
       end
-      redirect_to @vehicle, notice: "Images uploaded successfully!"
+      redirect_to manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), notice: "Images uploaded successfully!"
     else
-      redirect_to @vehicle, alert: "Please select at least one image."
+      redirect_to manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), alert: "Please select at least one image."
     end
   end
 
@@ -28,7 +37,7 @@ class VehiclesController < ApplicationController
     @vehicle = Vehicle.find(params[:id])
     image = @vehicle.images.find(params[:image_id])
     image.purge
-    redirect_to @vehicle, notice: "Image deleted successfully!"
+    redirect_to manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), notice: "Image deleted successfully!"
   end
 
   def search_images
@@ -55,12 +64,12 @@ class VehiclesController < ApplicationController
       result = ImageAttachmentService.new(@vehicle, params[:selected_image_urls]).call
 
       if result[:success] > 0
-        redirect_to @vehicle, notice: result[:message]
+        redirect_to manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), notice: result[:message]
       else
-        redirect_to search_images_vehicle_path(@vehicle), alert: result[:message]
+        redirect_to search_images_manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), alert: result[:message]
       end
     else
-      redirect_to search_images_vehicle_path(@vehicle), alert: "Please select at least one image."
+      redirect_to search_images_manufacturer_vehicle_path(@vehicle.manufacturer, @vehicle), alert: "Please select at least one image."
     end
   end
 end
